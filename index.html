@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Graybox Strand</title>
+
+  <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
+</head>
+
+<body>
+
+<a-scene>
+
+  <!-- CAMERA -->
+  <a-entity
+    camera
+    position="0 1.6 5"
+    wasd-controls
+    look-controls>
+  </a-entity>
+
+
+  <!-- LICHT -->
+  <a-entity
+    light="type: ambient; intensity: 1">
+  </a-entity>
+
+
+  <!-- ========================= -->
+  <!-- STRAND -->
+  <!-- ========================= -->
+
+  <a-plane
+    position="0 0 -5"
+    rotation="-90 0 0"
+    width="20"
+    height="20"
+    color="#C2B280">
+  </a-plane>
+
+  <a-box
+    position="0 0.05 -13"
+    scale="20 0.1 8"
+    color="blue">
+  </a-box>
+
+  <a-cylinder
+    position="-5 1.5 -2"
+    radius="0.1"
+    height="3"
+    color="#444444">
+    material=""
+  </a-cylinder>
+
+  <a-cone
+    position="-5 3 -2"
+    radius-bottom="1.5"
+    radius-top="0"
+    height="0.7"
+    color="#777777">
+  </a-cone>
+
+  <a-box
+    position="-4.2 0.0 -1"
+    scale="1.5 0.15 2.5"
+    rotation=" 0 0"
+    color="#666666">
+  </a-box>
+
+  <a-sphere
+    position="-2 0.4 -2"
+    radius="0.4"
+    color="#777777">
+  </a-sphere>
+
+  <a-box
+    position="1 0.08 -1.5"
+    scale="2 0.05 1"
+    color="#777777">
+  </a-box>
+
+  <a-cone
+    position="3 0.5 -3"
+    radius-bottom="0.5"
+    radius-top="0.1"
+    height="0.7"
+    color="#666666">
+  </a-cone>
+
+
+  <a-sphere
+    position="2 0.15 -1"
+    radius="0.15"
+    scale="1 0.3 1"
+    color="#BBBBBB">
+  </a-sphere>
+
+  <a-cylinder
+    position="6 2 -3"
+    radius="0.3"
+    height="4"
+    color="#555555">
+  </a-cylinder>
+
+  <a-sphere
+    position="6 4.3 -3"
+    radius="1.2"
+    scale="1.5 0.5 1.5"
+    color="#666666">
+  </a-sphere>
+
+  <a-torus
+    position="-3 0.3 -6"
+    rotation="90 0 0"
+    radius="0.6"
+    radius-tubular="0.15"
+    color="red">
+  </a-torus>
+
+  <a-box
+    position="-5 0.12 -9"
+    scale="3 0.08 0.2"
+    color="#BBBBBB">
+  </a-box>
+
+  <a-box
+    position="2 0.12 -10"
+    scale="4 0.08 0.2"
+    color="#BBBBBB">
+  </a-box>
+
+  <a-box
+    position="7 0.12 -11"
+    scale="3 0.08 0.2"
+    color="#BBBBBB">
+  </a-box>
+
+
+  <!-- LUCHT -->
+  <a-sky color="#87CEEB"></a-sky>
+
+</a-scene>
+
+</body>
+</html>
