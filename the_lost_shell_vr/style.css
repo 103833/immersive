@@ -1,0 +1,70 @@
+* { box-sizing: border-box; }
+:root {
+  --navy: rgba(8, 35, 54, 0.88);
+  --navy-soft: rgba(8, 35, 54, 0.72);
+  --cyan: #70f5e1;
+  --white: #f5fbff;
+  --muted: #bdd5df;
+}
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #8bd5f5; color: var(--white); }
+a-scene { position: fixed; inset: 0; }
+#hud { position: fixed; inset: 0; z-index: 5; pointer-events: none; }
+.hud-top { display: flex; align-items: flex-start; justify-content: space-between; padding: 20px 22px; gap: 16px; }
+.brand { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--navy); border: 1px solid rgba(112,245,225,.45); border-radius: 16px; box-shadow: 0 8px 28px #06283a33; }
+.brand-icon { font-size: 30px; }
+.brand strong { display: block; font-size: 18px; letter-spacing: .2px; }
+.brand small { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
+.stats { display: flex; gap: 8px; }
+.stat { min-width: 104px; padding: 12px 16px; border-radius: 14px; background: var(--navy); border: 1px solid rgba(255,255,255,.15); }
+.stat span { display: block; color: var(--muted); font-size: 10px; letter-spacing: 1.2px; font-weight: 800; }
+.stat strong { display: block; margin-top: 5px; font-size: 19px; }
+.quest-card { position: absolute; left: 22px; top: 112px; width: min(320px, calc(100vw - 44px)); padding: 17px 18px; background: var(--navy); border: 1px solid rgba(112,245,225,.45); border-radius: 16px; box-shadow: 0 8px 28px #06283a33; }
+.quest-heading { display: flex; justify-content: space-between; color: var(--cyan); font-size: 11px; font-weight: 900; letter-spacing: 1.5px; }
+#quest-text { margin: 10px 0 12px; font-size: 14px; line-height: 1.45; }
+.progress-track { height: 5px; border-radius: 10px; background: #ffffff22; overflow: hidden; }
+#quest-progress { height: 100%; width: 0; background: var(--cyan); transition: width .3s ease; }
+#quest-list { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 10px; }
+#quest-list li { display: flex; align-items: center; gap: 9px; font-size: 12px; color: #a8c1cc; }
+#quest-list li span { flex: 0 0 15px; height: 15px; border: 1px solid #a8c1cc88; border-radius: 5px; }
+#quest-list li.active { color: #fff; }
+#quest-list li.active span { border-color: var(--cyan); box-shadow: 0 0 10px #70f5e166; }
+#quest-list li.done { color: var(--cyan); }
+#quest-list li.done span { background: var(--cyan); border-color: var(--cyan); }
+#quest-list li.done span::after { content: "✓"; display: block; color: #07343b; font-weight: 900; text-align: center; line-height: 13px; }
+#crosshair { position: absolute; left: 50%; top: 50%; width: 22px; height: 22px; transform: translate(-50%,-50%); border: 2px solid #fff; border-radius: 50%; box-shadow: 0 0 0 3px #082d4433; }
+#crosshair span { position: absolute; width: 4px; height: 4px; background: var(--cyan); border-radius: 50%; left: 7px; top: 7px; }
+.bottom-hint { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); max-width: calc(100vw - 24px); padding: 10px 16px; border-radius: 12px; background: var(--navy-soft); color: #e6f5fb; border: 1px solid #ffffff22; font-size: 12px; text-align: center; white-space: nowrap; }
+#help-button { pointer-events: auto; position: absolute; right: 20px; bottom: 18px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid #70f5e1aa; background: var(--navy); color: white; font-size: 20px; cursor: pointer; }
+#toast { position: absolute; left: 50%; top: 23%; transform: translate(-50%,-10px); max-width: min(480px, calc(100vw - 36px)); padding: 12px 18px; border: 1px solid #70f5e188; border-radius: 13px; background: rgba(4,31,48,.92); text-align: center; font-size: 14px; opacity: 0; transition: opacity .2s, transform .2s; }
+#toast.show { opacity: 1; transform: translate(-50%,0); }
+.overlay { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 18px; background: rgba(3,19,30,.68); backdrop-filter: blur(8px); }
+.hidden { display: none !important; }
+.panel { width: min(540px, 100%); padding: clamp(24px, 5vw, 38px); background: linear-gradient(145deg, rgba(10,44,62,.98), rgba(7,27,43,.98)); border: 1px solid #70f5e188; border-radius: 24px; box-shadow: 0 20px 80px #00121e88; position: relative; }
+.intro-panel { text-align: center; }
+.eyebrow { color: var(--cyan); font-size: 11px; letter-spacing: 2.3px; font-weight: 900; }
+h1 { margin: 8px 0 12px; font-size: clamp(34px, 7vw, 52px); line-height: 1; letter-spacing: -1.5px; }
+h2 { margin: 0 0 18px; font-size: 27px; }
+.panel p { color: #d6e9f1; line-height: 1.6; }
+.controls-list { padding-left: 20px; text-align: left; color: #d6e9f1; line-height: 1.6; font-size: 14px; }
+.primary-button { border: 0; border-radius: 12px; padding: 14px 22px; margin-top: 12px; color: #06333a; background: var(--cyan); font-weight: 900; font-size: 15px; cursor: pointer; box-shadow: 0 5px 20px #4ee6d433; }
+.primary-button:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.small-note { font-size: 11px; color: #9dbbc7 !important; }
+.help-panel { max-width: 470px; }
+.close-button { position: absolute; right: 16px; top: 12px; border: 0; background: transparent; color: white; font-size: 28px; cursor: pointer; }
+#ending .panel { border-color: #9fffe9; }
+@media (max-width: 620px) {
+  .hud-top { padding: 10px; align-items: flex-start; }
+  .brand { padding: 9px 10px; gap: 8px; }
+  .brand-icon { font-size: 24px; }
+  .brand strong { font-size: 14px; }
+  .brand small { font-size: 10px; }
+  .stats { gap: 5px; }
+  .stat { min-width: 72px; padding: 9px 10px; }
+  .stat span { font-size: 8px; }
+  .stat strong { font-size: 15px; }
+  .quest-card { top: 84px; left: 10px; padding: 12px; width: min(275px, calc(100vw - 20px)); }
+  #quest-list { gap: 7px; }
+  #quest-list li { font-size: 11px; }
+  .bottom-hint { bottom: 12px; font-size: 10px; padding: 8px 10px; white-space: normal; width: calc(100vw - 72px); }
+  #help-button { right: 10px; bottom: 10px; }
+}

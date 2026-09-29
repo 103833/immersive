@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Lost Shell — Browser VR Game</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.5.4/dist/aframe-extras.controls.min.js"></script>
+  <script defer src="game.js"></script>
+</head>
+<body>
+  <div id="loading" class="overlay">
+    <div class="panel intro-panel">
+      <p class="eyebrow">BROWSER VR ADVENTURE</p>
+      <h1>The Lost Shell</h1>
+      <p>Verken een verlaten tropisch eiland, vind drie magische schelpen en ontdek de verborgen grot.</p>
+      <ul class="controls-list">
+        <li><strong>Desktop:</strong> WASD of pijltjes om te bewegen, muis om rond te kijken.</li>
+        <li><strong>Interactie:</strong> richt op een object en klik.</li>
+        <li><strong>VR:</strong> gebruik een headset en druk op <em>Enter VR</em>. Richt met je controller en druk op de trigger.</li>
+      </ul>
+      <button id="start-button" class="primary-button">Start avontuur</button>
+      <p class="small-note">Gebruik bij voorkeur Chrome of Edge. VR vereist een compatibele headset en HTTPS of localhost.</p>
+    </div>
+  </div>
+
+  <div id="hud" aria-live="polite">
+    <header class="hud-top">
+      <div class="brand">
+        <span class="brand-icon">🐚</span>
+        <div><strong>The Lost Shell</strong><small>Het eilandavontuur</small></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><span>SCHELPEN</span><strong id="shell-count">0 / 3</strong></div>
+        <div class="stat"><span>ENERGIE</span><strong id="health-value">♥ ♥ ♥</strong></div>
+      </div>
+    </header>
+
+    <section class="quest-card">
+      <div class="quest-heading"><span>JOUW MISSIE</span><span id="quest-step">1/4</span></div>
+      <p id="quest-text">Vind de drie verloren schelpen.</p>
+      <div class="progress-track"><div id="quest-progress"></div></div>
+      <ul id="quest-list">
+        <li id="task-shells" class="active"><span></span> Vind 3 magische schelpen</li>
+        <li id="task-cave"><span></span> Ontdek de verborgen grot</li>
+        <li id="task-altar"><span></span> Activeer het oude altaar</li>
+        <li id="task-return"><span></span> Keer terug naar de boot</li>
+      </ul>
+    </section>
+
+    <div id="toast" role="status"></div>
+    <div id="crosshair"><span></span></div>
+    <div class="bottom-hint" id="bottom-hint">WASD / pijltjes: bewegen · Muis: kijken · Klik: interactie</div>
+    <button id="help-button" title="Besturing tonen">?</button>
+  </div>
+
+  <div id="help-panel" class="overlay hidden">
+    <div class="panel help-panel">
+      <button id="close-help" class="close-button" aria-label="Sluiten">×</button>
+      <h2>Besturing</h2>
+      <p><strong>Bewegen:</strong> WASD of de pijltjestoetsen.</p>
+      <p><strong>Kijken:</strong> beweeg de muis terwijl je de muisknop ingedrukt houdt, of gebruik je headset.</p>
+      <p><strong>Interactie:</strong> richt op een schelp, bord, grot of altaar en klik. In VR gebruik je de trigger van je controller.</p>
+      <p><strong>Tip:</strong> blijf uit de buurt van de gloeiende paarse kristallen. Ze kosten energie.</p>
+      <button id="resume-button" class="primary-button">Verder spelen</button>
+    </div>
+  </div>
+
+  <div id="ending" class="overlay hidden">
+    <div class="panel intro-panel">
+      <p class="eyebrow">AVONTUUR VOLTOOID</p>
+      <h1>Het eiland is gered!</h1>
+      <p>Je hebt de magische schelpen teruggebracht en het oude altaar geactiveerd. De zee is weer rustig.</p>
+      <button id="restart-button" class="primary-button">Opnieuw spelen</button>
+    </div>
+  </div>
+
+  <a-scene
+    id="game-scene"
+    renderer="colorManagement: true; physicallyCorrectLights: true"
+    background="color: #8bd5f5"
+    fog="type: exponential; color: #a8e3f4; density: 0.012"
+    shadow="type: pcfsoft"
+    vr-mode-ui="enabled: true"
+    loading-screen="enabled: false">
+
+    <a-assets>
+      <a-mixin id="rock-mat" material="color: #777b78; roughness: 1"></a-mixin>
+      <a-mixin id="wood-mat" material="color: #825332; roughness: 1"></a-mixin>
+      <a-mixin id="leaf-mat" material="color: #2f8d54; roughness: 1"></a-mixin>
+      <a-mixin id="shell-mat" material="color: #55f2dc; emissive: #1b8e86; emissiveIntensity: 0.8; metalness: 0.1; roughness: 0.25"></a-mixin>
+    </a-assets>
+
+    <!-- Licht -->
+    <a-entity light="type: ambient; color: #d9f4ff; intensity: 0.8"></a-entity>
+    <a-entity light="type: directional; color: #fff1d1; intensity: 2.2; castShadow: true" position="-5 12 4"></a-entity>
+    <a-entity light="type: hemisphere; color: #bceaff; groundColor: #66533d; intensity: 0.6"></a-entity>
+
+    <!-- Zee en eiland -->
+    <a-plane position="0 -0.35 0" rotation="-90 0 0" width="180" height="180" material="color: #168cb7; roughness: 0.35; metalness: 0.1"></a-plane>
+    <a-circle position="0 -0.08 0" rotation="-90 0 0" radius="17" segments="48" material="color: #e8ca8e; roughness: 1"></a-circle>
+    <a-cone position="0 -0.55 0" radius-bottom="17" radius-top="13" height="1.1" material="color: #d5b777; roughness: 1"></a-cone>
+    <a-circle position="0 0.02 0" rotation="-90 0 0" radius="12.8" segments="48" material="color: #75a85a; roughness: 1"></a-circle>
+
+    <!-- Verre eilanden -->
+    <a-entity position="-28 1 -42">
+      <a-cone radius-bottom="12" radius-top="4" height="15" material="color: #4f7c78"></a-cone>
+      <a-cone position="0 7 0" radius-bottom="4.2" radius-top="0.3" height="8" material="color: #587f83"></a-cone>
+    </a-entity>
+    <a-entity position="29 0 -48">
+      <a-cone radius-bottom="14" radius-top="3" height="18" material="color: #527d72"></a-cone>
+      <a-cone position="0 8 0" radius-bottom="4" radius-top="0.2" height="10" material="color: #638c83"></a-cone>
+    </a-entity>
+
+    <!-- Palmbomen -->
+    <a-entity id="palm-trees"></a-entity>
+
+    <!-- Rotsen -->
+    <a-entity id="rocks"></a-entity>
+
+    <!-- Pad naar de grot -->
+    <a-entity id="cave-area" position="0 0 -10">
+      <a-entity position="0 1.4 -1.8">
+        <a-box position="-2.1 1.3 0" width="1.4" height="3.6" depth="3.4" rotation="0 0 -9" material="color: #4c5556"></a-box>
+        <a-box position="2.1 1.3 0" width="1.4" height="3.6" depth="3.4" rotation="0 0 9" material="color: #4c5556"></a-box>
+        <a-cone position="0 3.15 0" radius-bottom="3.0" radius-top="0.8" height="2" rotation="0 0 180" material="color: #41494a"></a-cone>
+        <a-box position="0 0.3 0.1" width="2.9" height="0.5" depth="3.2" material="color: #353c3d"></a-box>
+        <a-torus position="0 1.2 0.05" rotation="0 0 0" radius="1.1" radius-tubular="0.07" material="color: #a9f4e6; emissive: #39b9a6; emissiveIntensity: 1"></a-torus>
+      </a-entity>
+      <a-text value="VERBORGEN GROT" position="0 4 -1.7" align="center" color="#ffffff" width="8" side="double"></a-text>
+      <a-entity id="cave-trigger" class="interactable" position="0 1.2 -1.6" geometry="primitive: sphere; radius: 1.05" material="color: #55e7d0; opacity: 0.08; transparent: true" data-action="cave" visible="true"></a-entity>
+    </a-entity>
+
+    <!-- Oude altaar -->
+    <a-entity id="altar" position="0 0.2 -12.5">
+      <a-cylinder radius="1.15" height="0.5" position="0 0.25 0" material="color: #8a8980"></a-cylinder>
+      <a-cylinder radius="0.8" height="0.45" position="0 0.7 0" material="color: #b7b6a8"></a-cylinder>
+      <a-dodecahedron position="0 1.45 0" radius="0.52" material="color: #66ffe3; emissive: #1bb7a0; emissiveIntensity: 0.7; metalness: 0.2" animation="property: rotation; to: 0 360 0; dur: 7000; loop: true; easing: linear"></a-dodecahedron>
+      <a-ring position="0 1.45 0" rotation="90 0 0" radius-inner="0.7" radius-outer="0.78" material="color: #8effe7; emissive: #27cdb5; emissiveIntensity: 1"></a-ring>
+      <a-text value="OUD ALTAAR" position="0 2.2 0" align="center" color="#ffffff" width="5" side="double"></a-text>
+      <a-entity id="altar-trigger" class="interactable" position="0 1.2 0" geometry="primitive: sphere; radius: 1.1" material="color: #55e7d0; opacity: 0.06; transparent: true" data-action="altar"></a-entity>
+    </a-entity>
+
+    <!-- Schelpen -->
+    <a-entity id="shells">
+      <a-entity id="shell-1" class="interactable collectible" data-action="shell" data-shell="1" position="-6 0.55 3">
+        <a-sphere radius="0.34" scale="1 0.48 0.65" mixin="shell-mat"></a-sphere>
+        <a-torus position="0 0.03 0" rotation="90 0 0" radius="0.25" radius-tubular="0.055" material="color: #b8fff1; emissive: #2ee6d2; emissiveIntensity: 0.7"></a-torus>
+        <a-light type="point" color="#45f5df" intensity="0.6" distance="3"></a-light>
+      </a-entity>
+      <a-entity id="shell-2" class="interactable collectible" data-action="shell" data-shell="2" position="7 0.6 -2">
+        <a-sphere radius="0.34" scale="1 0.48 0.65" mixin="shell-mat"></a-sphere>
+        <a-torus position="0 0.03 0" rotation="90 0 0" radius="0.25" radius-tubular="0.055" material="color: #b8fff1; emissive: #2ee6d2; emissiveIntensity: 0.7"></a-torus>
+        <a-light type="point" color="#45f5df" intensity="0.6" distance="3"></a-light>
+      </a-entity>
+      <a-entity id="shell-3" class="interactable collectible" data-action="shell" data-shell="3" position="-1.8 0.6 -7.5">
+        <a-sphere radius="0.34" scale="1 0.48 0.65" mixin="shell-mat"></a-sphere>
+        <a-torus position="0 0.03 0" rotation="90 0 0" radius="0.25" radius-tubular="0.055" material="color: #b8fff1; emissive: #2ee6d2; emissiveIntensity: 0.7"></a-torus>
+        <a-light type="point" color="#45f5df" intensity="0.6" distance="3"></a-light>
+      </a-entity>
+    </a-entity>
+
+    <!-- Paarse energie-kristallen -->
+    <a-entity id="crystals"></a-entity>
+
+    <!-- Startstrand, boot en bord -->
+    <a-entity id="boat" position="0 0.1 8">
+      <a-cone position="0 0.15 0" rotation="90 0 0" radius-bottom="1.25" radius-top="0.7" height="4.2" material="color: #70472c"></a-cone>
+      <a-box position="0 0.55 0" width="1.7" height="0.18" depth="2.8" material="color: #a97545"></a-box>
+      <a-cylinder position="0 1.3 0" radius="0.06" height="2.1" material="color: #d9c59b"></a-cylinder>
+      <a-triangle position="0.55 1.5 0" vertex-a="0 0.9 0" vertex-b="0 0 0" vertex-c="1.1 0.15 0" material="color: #f4f0dc; side: double"></a-triangle>
+      <a-text value="JOUW BOOT" position="0 2.4 0" align="center" color="#ffffff" width="4" side="double"></a-text>
+      <a-entity id="boat-trigger" class="interactable" position="0 1 0" geometry="primitive: sphere; radius: 1.8" material="color: #ffffff; opacity: 0.03; transparent: true" data-action="boat"></a-entity>
+    </a-entity>
+
+    <a-entity position="3 0.1 4">
+      <a-cylinder radius="0.12" height="2.4" position="0 1.2 0" material="color: #674329"></a-cylinder>
+      <a-box position="0 2.4 0" width="1.5" height="0.85" depth="0.15" material="color: #94613b"></a-box>
+      <a-text value="EILAND VERKENNEN →" position="0 2.42 0.09" align="center" color="#fff1d3" width="3.5" side="double"></a-text>
+    </a-entity>
+
+    <!-- Camera en interactie: muis, gaze en VR-controllers -->
+    <a-entity id="player" position="0 0 10" movement-controls="controls: gamepad, keyboard; speed: 0.15">
+      <a-entity id="camera" camera look-controls position="0 1.65 0" near="0.05">
+        <a-entity cursor="rayOrigin: mouse; fuse: false" raycaster="objects: .interactable; far: 12; interval: 50" position="0 0 -1"></a-entity>
+      </a-entity>
+      <a-entity id="left-hand" laser-controls="hand: left" raycaster="objects: .interactable; far: 12; interval: 50" line="color: #7fffee; opacity: 0.8"></a-entity>
+      <a-entity id="right-hand" laser-controls="hand: right" raycaster="objects: .interactable; far: 12; interval: 50" line="color: #7fffee; opacity: 0.8"></a-entity>
+    </a-entity>
+
+    <a-sky color="#8bd5f5"></a-sky>
+  </a-scene>
+</body>
+</html>
