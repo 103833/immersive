@@ -1,6 +1,9 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="nl">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Graybox Strand</title>
 
   <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
@@ -10,25 +13,42 @@
 
 <a-scene>
 
+  <!-- AUDIOBESTANDEN -->
+  <a-assets>
+    <audio
+      id="shellSound"
+      src="shell.mp3"
+      preload="auto">
+    </audio>
+
+    <audio
+      id="wavesSound"
+      src="waves.mp3"
+      preload="auto"
+      loop>
+    </audio>
+  </a-assets>
+
   <!-- CAMERA -->
   <a-entity
     camera
     position="0 1.6 5"
     wasd-controls
     look-controls>
-  </a-entity>
 
+    <a-entity
+      cursor="rayOrigin: mouse; fuse: false"
+      raycaster="objects: .clickable; far: 30">
+    </a-entity>
+
+  </a-entity>
 
   <!-- LICHT -->
   <a-entity
     light="type: ambient; intensity: 1">
   </a-entity>
 
-
-  <!-- ========================= -->
   <!-- STRAND -->
-  <!-- ========================= -->
-
   <a-plane
     position="0 0 -5"
     rotation="-90 0 0"
@@ -37,18 +57,19 @@
     color="#C2B280">
   </a-plane>
 
+  <!-- ZEE -->
   <a-box
     position="0 0.05 -13"
     scale="20 0.1 8"
     color="blue">
   </a-box>
 
+  <!-- PARASOL -->
   <a-cylinder
     position="-5 1.5 -2"
     radius="0.1"
     height="3"
     color="#444444">
-    material=""
   </a-cylinder>
 
   <a-cone
@@ -59,13 +80,14 @@
     color="#777777">
   </a-cone>
 
+  <!-- STRANDSTOEL -->
   <a-box
     position="-4.2 0.0 -1"
     scale="1.5 0.15 2.5"
-    rotation=" 0 0"
     color="#666666">
   </a-box>
 
+  <!-- STEEN -->
   <a-sphere
     position="-2 0.4 -2"
     radius="0.4"
@@ -78,6 +100,7 @@
     color="#777777">
   </a-box>
 
+  <!-- KLEINE ROTS -->
   <a-cone
     position="3 0.5 -3"
     radius-bottom="0.5"
@@ -86,14 +109,17 @@
     color="#666666">
   </a-cone>
 
-
+  <!-- GROENE SCHELP -->
   <a-sphere
+    id="shell"
+    class="clickable"
     position="2 0.15 -1"
     radius="0.15"
     scale="1 0.3 1"
-    color="#BBBBBB">
+    color="green">
   </a-sphere>
 
+  <!-- GROTE ROTS -->
   <a-cylinder
     position="6 2 -3"
     radius="0.3"
@@ -108,6 +134,7 @@
     color="#666666">
   </a-sphere>
 
+  <!-- RODE ZWEMBAND -->
   <a-torus
     position="-3 0.3 -6"
     rotation="90 0 0"
@@ -116,6 +143,7 @@
     color="red">
   </a-torus>
 
+  <!-- STRANDLIJNEN -->
   <a-box
     position="-5 0.12 -9"
     scale="3 0.08 0.2"
@@ -134,11 +162,98 @@
     color="#BBBBBB">
   </a-box>
 
-
   <!-- LUCHT -->
   <a-sky color="#87CEEB"></a-sky>
 
 </a-scene>
+
+<script>
+  const shell = document.querySelector("#shell");
+  const shellSound = document.querySelector("#shellSound");
+  const wavesSound = document.querySelector("#wavesSound");
+
+  let isAnimating = false;
+  let wavesStarted = false;
+
+  // ACHTERGRONDGELUID VAN DE ZEE
+  async function startWaves() {
+    if (wavesStarted) return;
+
+    wavesStarted = true;
+    wavesSound.volume = 0.35;
+
+    try {
+      await wavesSound.play();
+    } catch (error) {
+      wavesStarted = false;
+      console.log("Golven konden niet worden afgespeeld:", error);
+    }
+  }
+
+  // AUDIO START NA DE EERSTE GEBRUIKERSINTERACTIE
+  document.addEventListener("pointerdown", startWaves);
+
+  document.addEventListener("keydown", startWaves);
+
+  // SCHELP AANKLIKKEN
+  shell.addEventListener("click", async () => {
+    if (isAnimating) return;
+
+    isAnimating = true;
+
+    // SPEEL SHELL.MP3 AF
+    shellSound.currentTime = 0;
+
+    try {
+      await shellSound.play();
+    } catch (error) {
+      console.log("Schelpgeluid kon niet worden afgespeeld:", error);
+    }
+
+    // SCHELP SPRINGT OMHOOG
+    shell.setAttribute("animation__jump", {
+      property: "position",
+      from: "2 0.15 -1",
+      to: "2 0.8 -1",
+      dur: 300,
+      dir: "alternate",
+      loop: 2,
+      easing: "easeOutQuad"
+    });
+
+    // SCHELP DRAAIT
+    shell.setAttribute("animation__spin", {
+      property: "rotation",
+      from: "0 0 0",
+      to: "0 360 0",
+      dur: 600,
+      easing: "easeInOutQuad"
+    });
+
+    // SCHELP VERANDERT VAN KLEUR
+    shell.setAttribute("animation__color", {
+      property: "material.color",
+      from: "green",
+      to: "yellow",
+      dur: 300,
+      dir: "alternate",
+      loop: 2
+    });
+
+    // HERSTEL DE OORSPRONKELIJKE STAAT
+    setTimeout(() => {
+      shell.removeAttribute("animation__jump");
+      shell.removeAttribute("animation__spin");
+      shell.removeAttribute("animation__color");
+
+      shell.setAttribute("position", "2 0.15 -1");
+      shell.setAttribute("rotation", "0 0 0");
+      shell.setAttribute("color", "green");
+
+      isAnimating = false;
+    }, 1500);
+  });
+</script>
 
 </body>
 </html>
