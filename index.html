@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -13,247 +12,512 @@
 
 <a-scene>
 
-  <!-- AUDIOBESTANDEN -->
   <a-assets>
+
+    <a-asset-item
+            id="myModel"
+            src="./assets/GLB_format/boat-fishing-small.glb">
+    </a-asset-item>
+
     <audio
-      id="shellSound"
-      src="shell.mp3"
-      preload="auto">
+            id="shellSound"
+            src="shell.mp3"
+            preload="auto">
     </audio>
 
     <audio
-      id="wavesSound"
-      src="waves.mp3"
-      preload="auto"
-      loop>
+            id="wavesSound"
+            src="waves.mp3"
+            preload="auto"
+            loop>
     </audio>
+
   </a-assets>
 
+
+  <!-- SKY -->
+
+  <a-sky color="#78BFE8"></a-sky>
+
+
+  <!-- LIGHT -->
+
+  <a-light
+          type="ambient"
+          color="#FFE8C7"
+          intensity="0.65">
+  </a-light>
+
+  <a-light
+          type="directional"
+          color="#FFD39B"
+          intensity="1.8"
+          position="-10 12 -6"
+          rotation="-45 -30 0">
+  </a-light>
+
+  <a-light
+          type="hemisphere"
+          color="#8ED8FF"
+          ground-color="#E8B978"
+          intensity="0.45">
+  </a-light>
+
+
+  <!-- SUN -->
+
+  <a-sphere
+          position="-8 10 -18"
+          radius="1.5"
+          color="#FFD56A"
+          material="shader: flat">
+  </a-sphere>
+
+
   <!-- CAMERA -->
+
   <a-entity
-    camera
-    position="0 1.6 5"
-    wasd-controls
-    look-controls>
+          camera
+          position="0 1.6 5"
+          wasd-controls
+          look-controls>
 
     <a-entity
-      cursor="rayOrigin: mouse; fuse: false"
-      raycaster="objects: .clickable; far: 30">
+            cursor="rayOrigin: mouse; fuse: false"
+            raycaster="objects: .clickable; far: 30">
     </a-entity>
 
   </a-entity>
 
-  <!-- LICHT -->
+
+  <!-- BOAT -->
+
   <a-entity
-    light="type: ambient; intensity: 1">
+          id="boat"
+          gltf-model="#myModel"
+          position="-7 0 -12"
+          rotation="0 90 0"
+          scale="1 1 1">
   </a-entity>
 
-  <!-- STRAND -->
+
+  <!-- BEACH -->
+
   <a-plane
-    position="0 0 -5"
-    rotation="-90 0 0"
-    width="20"
-    height="20"
-    color="#C2B280">
+          position="0 0 -5"
+          rotation="-90 0 0"
+          width="20"
+          height="20"
+          color="#D8B978">
   </a-plane>
 
-  <!-- ZEE -->
+
+  <!-- WATER -->
+
   <a-box
-    position="0 0.05 -13"
-    scale="20 0.1 8"
-    color="blue">
+          position="0 0.05 -13"
+          scale="20 0.1 8"
+          color="#268FC2">
   </a-box>
+
 
   <!-- PARASOL -->
+
   <a-cylinder
-    position="-5 1.5 -2"
-    radius="0.1"
-    height="3"
-    color="#444444">
+          position="-5 1.5 -2"
+          radius="0.1"
+          height="3"
+          color="#555555">
   </a-cylinder>
 
   <a-cone
-    position="-5 3 -2"
-    radius-bottom="1.5"
-    radius-top="0"
-    height="0.7"
-    color="#777777">
+          position="-5 3 -2"
+          radius-bottom="1.5"
+          radius-top="0"
+          height="0.7"
+          color="#E85D5D">
   </a-cone>
 
-  <!-- STRANDSTOEL -->
-  <a-box
-    position="-4.2 0.0 -1"
-    scale="1.5 0.15 2.5"
-    color="#666666">
-  </a-box>
 
-  <!-- STEEN -->
-  <a-sphere
-    position="-2 0.4 -2"
-    radius="0.4"
-    color="#777777">
-  </a-sphere>
+  <!-- TOWEL -->
 
   <a-box
-    position="1 0.08 -1.5"
-    scale="2 0.05 1"
-    color="#777777">
+          position="-4.1 0 -1"
+          scale="1.5 0.15 2.5"
+          color="red">
   </a-box>
 
-  <!-- KLEINE ROTS -->
-  <a-cone
-    position="3 0.5 -3"
-    radius-bottom="0.5"
-    radius-top="0.1"
-    height="0.7"
-    color="#666666">
-  </a-cone>
 
-  <!-- GROENE SCHELP -->
-  <a-sphere
-    id="shell"
-    class="clickable"
-    position="2 0.15 -1"
-    radius="0.15"
-    scale="1 0.3 1"
-    color="green">
-  </a-sphere>
 
-  <!-- GROTE ROTS -->
+
+  <!-- PALM TREE 1 -->
+
   <a-cylinder
-    position="6 2 -3"
-    radius="0.3"
-    height="4"
-    color="#555555">
+          position="-7 1.8 -5"
+          radius="0.25"
+          height="3.6"
+          color="#795548"
+          rotation="0 0 -4">
   </a-cylinder>
 
   <a-sphere
-    position="6 4.3 -3"
-    radius="1.2"
-    scale="1.5 0.5 1.5"
-    color="#666666">
+          position="-7 3.7 -5"
+          radius="1.1"
+          scale="1.5 0.35 1.5"
+          color="#3F8F45">
   </a-sphere>
 
-  <!-- RODE ZWEMBAND -->
+  <a-sphere
+          position="-7.8 3.6 -5"
+          radius="0.8"
+          scale="1.5 0.3 0.8"
+          color="#4FA64F">
+  </a-sphere>
+
+  <a-sphere
+          position="-6.2 3.6 -5"
+          radius="0.8"
+          scale="1.5 0.3 0.8"
+          color="#4FA64F">
+  </a-sphere>
+
+
+  <!-- PALM TREE 2 -->
+
+  <a-cylinder
+          position="7 2 -7"
+          radius="0.22"
+          height="4"
+          color="#795548"
+          rotation="0 0 5">
+  </a-cylinder>
+
+  <a-sphere
+          position="7 4.1 -7"
+          radius="1.1"
+          scale="1.6 0.35 1.6"
+          color="#398442">
+  </a-sphere>
+
+  <a-sphere
+          position="6.2 4 -7"
+          radius="0.7"
+          scale="1.5 0.3 0.8"
+          color="#4FA64F">
+  </a-sphere>
+
+  <a-sphere
+          position="7.8 4 -7"
+          radius="0.7"
+          scale="1.5 0.3 0.8"
+          color="#4FA64F">
+  </a-sphere>
+
+
+  <!-- SANDCASTLE -->
+
+  <a-entity
+          id="sandcastle"
+          position="4 0 -2">
+
+    <a-cylinder
+            class="clickable"
+            id="sandcastleClick"
+            position="0 0.35 0"
+            radius="0.55"
+            height="0.7"
+            color="#D9B36C">
+    </a-cylinder>
+
+    <a-cylinder
+            position="-0.35 0.75 0"
+            radius="0.18"
+            height="0.5"
+            color="#C99D59">
+    </a-cylinder>
+
+    <a-cylinder
+            position="0.35 0.75 0"
+            radius="0.18"
+            height="0.5"
+            color="#C99D59">
+    </a-cylinder>
+
+    <a-cone
+            position="-0.35 1.1 0"
+            radius-bottom="0.25"
+            radius-top="0"
+            height="0.35"
+            color="#D9B36C">
+    </a-cone>
+
+    <a-cone
+            position="0.35 1.1 0"
+            radius-bottom="0.25"
+            radius-top="0"
+            height="0.35"
+            color="#D9B36C">
+    </a-cone>
+
+  </a-entity>
+
+
+  <!-- SHELL -->
+
+  <a-sphere
+          id="shell"
+          class="clickable"
+          position="2 0.15 -1"
+          radius="0.15"
+          scale="1 0.3 1"
+          color="#55A83F">
+  </a-sphere>
+
+
+  <!-- BEACH BALL -->
+
   <a-torus
-    position="-3 0.3 -6"
-    rotation="90 0 0"
-    radius="0.6"
-    radius-tubular="0.15"
-    color="red">
+          position="-3 0.3 -6"
+          rotation="90 0 0"
+          radius="0.6"
+          radius-tubular="0.15"
+          color="#4B8FE8">
   </a-torus>
 
-  <!-- STRANDLIJNEN -->
+
+  <!-- BEACH DETAILS -->
+
   <a-box
-    position="-5 0.12 -9"
-    scale="3 0.08 0.2"
-    color="#BBBBBB">
+          position="-5 0.12 -9"
+          scale="3 0.08 0.2"
+          color="#C5B68D">
   </a-box>
 
   <a-box
-    position="2 0.12 -10"
-    scale="4 0.08 0.2"
-    color="#BBBBBB">
+          position="2 0.12 -10"
+          scale="4 0.08 0.2"
+          color="#C5B68D">
   </a-box>
 
   <a-box
-    position="7 0.12 -11"
-    scale="3 0.08 0.2"
-    color="#BBBBBB">
+          position="7 0.12 -11"
+          scale="3 0.08 0.2"
+          color="#C5B68D">
   </a-box>
 
-  <!-- LUCHT -->
-  <a-sky color="#87CEEB"></a-sky>
+
+  <!-- BOAT SCRIPT -->
+
+  <script>
+
+    const boat = document.querySelector("#boat");
+
+    let goingRight = true;
+
+    function moveBoat() {
+
+      const target = goingRight
+              ? "7 0 -12"
+              : "-7 0 -12";
+
+      boat.setAttribute("animation__move", {
+        property: "position",
+        to: target,
+        dur: 3000,
+        easing: "easeInOutQuad"
+      });
+    }
+
+    boat.addEventListener("animationcomplete__move", () => {
+
+      setTimeout(() => {
+
+        const rotation = boat.getAttribute("rotation");
+
+        boat.setAttribute("rotation", {
+          x: rotation.x,
+          y: rotation.y + 180,
+          z: rotation.z
+        });
+
+        goingRight = !goingRight;
+
+        moveBoat();
+
+      }, 2000);
+
+    });
+
+    moveBoat();
+
+  </script>
+
+
+  <!-- SANDCASTLE SCRIPT -->
+
+  <script>
+
+    const sandcastle = document.querySelector("#sandcastle");
+    const sandcastleClick = document.querySelector("#sandcastleClick");
+
+    let castleSpinning = false;
+
+    sandcastleClick.addEventListener("click", () => {
+
+      if (castleSpinning) return;
+
+      castleSpinning = true;
+
+      sandcastle.setAttribute("animation__spin", {
+        property: "rotation",
+        from: "0 0 0",
+        to: "0 360 0",
+        dur: 1000,
+        easing: "linear"
+      });
+
+      setTimeout(() => {
+
+        sandcastle.removeAttribute("animation__spin");
+
+        sandcastle.setAttribute(
+                "rotation",
+                "0 0 0"
+        );
+
+        castleSpinning = false;
+
+      }, 1000);
+
+    });
+
+  </script>
+
+
+  <!-- AUDIO -->
+
+  <script>
+
+    const shell = document.querySelector("#shell");
+    const shellSound = document.querySelector("#shellSound");
+    const wavesSound = document.querySelector("#wavesSound");
+
+    let isAnimating = false;
+    let wavesStarted = false;
+
+    async function startWaves() {
+
+      if (wavesStarted) return;
+
+      wavesStarted = true;
+      wavesSound.volume = 0.35;
+
+      try {
+
+        await wavesSound.play();
+
+      } catch (error) {
+
+        wavesStarted = false;
+
+        console.log(
+                "Golven konden niet worden afgespeeld:",
+                error
+        );
+
+      }
+
+    }
+
+    document.addEventListener(
+            "pointerdown",
+            startWaves
+    );
+
+    document.addEventListener(
+            "keydown",
+            startWaves
+    );
+
+
+    shell.addEventListener("click", async () => {
+
+      if (isAnimating) return;
+
+      isAnimating = true;
+
+      shellSound.currentTime = 0;
+
+      try {
+
+        await shellSound.play();
+
+      } catch (error) {
+
+        console.log(
+                "Schelpgeluid kon niet worden afgespeeld:",
+                error
+        );
+
+      }
+
+      shell.setAttribute("animation__jump", {
+        property: "position",
+        from: "2 0.15 -1",
+        to: "2 0.8 -1",
+        dur: 300,
+        dir: "alternate",
+        loop: 2,
+        easing: "easeOutQuad"
+      });
+
+      shell.setAttribute("animation__spin", {
+        property: "rotation",
+        from: "0 0 0",
+        to: "0 360 0",
+        dur: 600,
+        easing: "easeInOutQuad"
+      });
+
+      shell.setAttribute("animation__color", {
+        property: "material.color",
+        from: "green",
+        to: "yellow",
+        dur: 300,
+        dir: "alternate",
+        loop: 2
+      });
+
+      setTimeout(() => {
+
+        shell.removeAttribute("animation__jump");
+        shell.removeAttribute("animation__spin");
+        shell.removeAttribute("animation__color");
+
+        shell.setAttribute(
+                "position",
+                "2 0.15 -1"
+        );
+
+        shell.setAttribute(
+                "rotation",
+                "0 0 0"
+        );
+
+        shell.setAttribute(
+                "color",
+                "#55A83F"
+        );
+
+        isAnimating = false;
+
+      }, 1500);
+
+    });
+
+  </script>
 
 </a-scene>
-
-<script>
-  const shell = document.querySelector("#shell");
-  const shellSound = document.querySelector("#shellSound");
-  const wavesSound = document.querySelector("#wavesSound");
-
-  let isAnimating = false;
-  let wavesStarted = false;
-
-  // ACHTERGRONDGELUID VAN DE ZEE
-  async function startWaves() {
-    if (wavesStarted) return;
-
-    wavesStarted = true;
-    wavesSound.volume = 0.35;
-
-    try {
-      await wavesSound.play();
-    } catch (error) {
-      wavesStarted = false;
-      console.log("Golven konden niet worden afgespeeld:", error);
-    }
-  }
-
-  // AUDIO START NA DE EERSTE GEBRUIKERSINTERACTIE
-  document.addEventListener("pointerdown", startWaves);
-
-  document.addEventListener("keydown", startWaves);
-
-  // SCHELP AANKLIKKEN
-  shell.addEventListener("click", async () => {
-    if (isAnimating) return;
-
-    isAnimating = true;
-
-    // SPEEL SHELL.MP3 AF
-    shellSound.currentTime = 0;
-
-    try {
-      await shellSound.play();
-    } catch (error) {
-      console.log("Schelpgeluid kon niet worden afgespeeld:", error);
-    }
-
-    // SCHELP SPRINGT OMHOOG
-    shell.setAttribute("animation__jump", {
-      property: "position",
-      from: "2 0.15 -1",
-      to: "2 0.8 -1",
-      dur: 300,
-      dir: "alternate",
-      loop: 2,
-      easing: "easeOutQuad"
-    });
-
-    // SCHELP DRAAIT
-    shell.setAttribute("animation__spin", {
-      property: "rotation",
-      from: "0 0 0",
-      to: "0 360 0",
-      dur: 600,
-      easing: "easeInOutQuad"
-    });
-
-    // SCHELP VERANDERT VAN KLEUR
-    shell.setAttribute("animation__color", {
-      property: "material.color",
-      from: "green",
-      to: "yellow",
-      dur: 300,
-      dir: "alternate",
-      loop: 2
-    });
-
-    // HERSTEL DE OORSPRONKELIJKE STAAT
-    setTimeout(() => {
-      shell.removeAttribute("animation__jump");
-      shell.removeAttribute("animation__spin");
-      shell.removeAttribute("animation__color");
-
-      shell.setAttribute("position", "2 0.15 -1");
-      shell.setAttribute("rotation", "0 0 0");
-      shell.setAttribute("color", "green");
-
-      isAnimating = false;
-    }, 1500);
-  });
-</script>
 
 </body>
 </html>
